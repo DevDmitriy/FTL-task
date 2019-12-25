@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-import {api} from '../services/api'
+import {api} from '../../services/api'
 import './size.css'
+import {filterFrames, filterFramesReduce} from "../../utills/utills";
 
 class Size extends Component {
   constructor(props) {
@@ -12,30 +13,10 @@ class Size extends Component {
   }
 
   componentDidMount() {
-    api.rides.get()
+    api.rides.getMock()
       .then((res) => {
         this.setState({variations: filterFrames(res.cluster.variations)})
       })
-
-    function filterFrames(framesArr) {
-      let result = []
-      framesArr.forEach((item) => {
-        item.idOverlap = [item.id]
-        let sameSizeInResult = result.find((resultItem) => {
-          return item.frameSize === resultItem.frameSize && item.size === resultItem.size
-        })
-
-        if (sameSizeInResult) {
-          sameSizeInResult.idOverlap.push(item.id)
-        }
-        else {
-          result.push(item);
-        }
-
-      })
-      return result;
-    }
-
   }
 
   updateSize = (e) => {
@@ -51,7 +32,8 @@ class Size extends Component {
     return (
       <div className="select-ride">
         <label htmlFor="selectRide">Pick a size</label>
-        <select id="selectRide" onChange={this.updateSize}>
+        <select defaultValue={'default'} id="selectRide" onChange={this.updateSize}>
+          <option value='default' disabled>Pick a size</option>
           {variations.map((option, selectedIndex) => (
             <option key={option.id}
                     value={selectedIndex}>

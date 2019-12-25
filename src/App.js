@@ -1,5 +1,5 @@
 import React from 'react';
-import Size from './components/size'
+import Size from './components/size/size'
 import './App.css';
 
 function App() {
