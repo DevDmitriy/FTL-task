@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {api} from '../services/api'
+import './size.css'
 
 class Size extends Component {
   constructor(props) {
@@ -8,33 +9,30 @@ class Size extends Component {
       variations: [],
       selectedOption: {}
     }
-
   }
 
   componentDidMount() {
     api.rides.get()
       .then((res) => {
         this.setState({variations: filterFrames(res.cluster.variations)})
-        console.log('incoming', res.cluster.variations)
       })
 
     function filterFrames(framesArr) {
       let result = []
       framesArr.forEach((item) => {
         item.idOverlap = [item.id]
-        let duplicate = result.filter((resultItem) => {
+        let sameSizeInResult = result.find((resultItem) => {
           return item.frameSize === resultItem.frameSize && item.size === resultItem.size
         })
 
-        if (duplicate.length) {
-          duplicate[0].idOverlap.push(item.id)
+        if (sameSizeInResult) {
+          sameSizeInResult.idOverlap.push(item.id)
         }
         else {
           result.push(item);
         }
 
       })
-      console.log(result)
       return result;
     }
 
