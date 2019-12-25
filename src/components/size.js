@@ -15,6 +15,7 @@ class Size extends Component {
     api.rides.get()
       .then((res) => {
         this.setState({variations: filterFrames(res.cluster.variations)})
+        console.log('incoming', res.cluster.variations)
       })
 
     function filterFrames(framesArr) {
@@ -26,10 +27,14 @@ class Size extends Component {
         })
 
         if (duplicate.length) {
-          item.idOverlap.push(duplicate[0].id)
+          duplicate[0].idOverlap.push(item.id)
         }
-        result.push(item);
+        else {
+          result.push(item);
+        }
+
       })
+      console.log(result)
       return result;
     }
 
